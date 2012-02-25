@@ -33,7 +33,7 @@ NIL
 #+END_EXAMPLE
 
 
-* TODO
+* Things to improve / TODO
 
 - Check on null pointer return values
 - Make the results typed
