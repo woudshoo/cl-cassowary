@@ -17,5 +17,11 @@
 	   #:solver
 	   #:solver-add-strong-stay
 	   #:solver-set-edited-value
-	   #:solver-set-changed-callback))
+	   #:solver-set-changed-callback
+	   #:solver-add-edit
+	   #:solver-add-weak-edit
+	   #:solver-add-strong-edit
+	   #:solver-suggest-value
+	   #:solver-begin-edit
+	   #:solver-end-edit))
 

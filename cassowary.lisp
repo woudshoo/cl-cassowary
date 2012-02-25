@@ -106,6 +106,44 @@
   (variable cl-variable)
   (value :double))
 
+(cffi:defcfun ("CL_SimplexSolverSuggestValue" %cl-simplex-solver-suggest-value)
+    :void
+  (solver cl-simplex-solver)
+  (variable cl-variable)
+  (value :double))
+
+(cffi:defcfun ("CL_SimplexSolverAddEditVar" %cl-simplex-solver-add-edit-var)
+    :boolean
+  (solver cl-simplex-solver)
+  (variable cl-variable)
+  (weight :double))
+
+
+(cffi:defcfun ("CL_SimplexSolverAddEditVarStrong" %cl-simplex-solver-add-edit-var-strong)
+    :boolean
+  (solver cl-simplex-solver)
+  (variable cl-variable)
+  (weight :double))
+
+(cffi:defcfun ("CL_SimplexSolverAddEditVarWeak" %cl-simplex-solver-add-edit-var-weak)
+    :boolean
+  (solver cl-simplex-solver)
+  (variable cl-variable)
+  (weight :double))
+
+(cffi:defcfun ("CL_SimplexSolverRemoveEditVar" %cl-simplex-solver-remove-edit-var)
+    :boolean
+  (solver cl-simplex-solver)
+  (variable cl-variable))
+
+(cffi:defcfun ("CL_SimplexSolverBeginEdit" %cl-simplex-solver-begin-edit)
+    :void
+  (solver cl-simplex-solver))
+
+(cffi:defcfun ("CL_SimplexSolverEndEdit" %cl-simplex-solver-end-edit)
+    :void
+  (solver cl-simplex-solver))
+
 (cffi:defcfun ("CL_SolverSetChangeClvCallback" %cl-solver-set-changed-clv-callback)
     :void
   (solver cl-solver)
@@ -170,6 +208,15 @@ the corresponding variable object"
   "Do a resolve after changing valus and or adding constraints."
   (%cl-resolve solver))
 
+(defun solver-begin-edit (solver)
+  "Starts an editing sequence, first add edit variables and while
+then call this function and now you are setup for suggesting values and doing resolves."
+  (%cl-simplex-solver-begin-edit solver))
+
+(defun solver-end-edit (solver)
+  "Stops an editing sequence and removes all edit variables."
+  (%cl-simplex-solver-end-edit solver))
+
 (defun solver-add-stay (solver variable value)
   "Adds a stay constraint on the `variable' to the `solver'."
   (%cl-simplex-solver-add-stay solver 
@@ -181,6 +228,30 @@ the corresponding variable object"
   (%cl-simplex-solver-add-strong-stay solver 
 			       (variable-for-designator variable)
 			       (coerce value 'double-float)))
+
+(defun solver-add-edit (solver variable weight)
+  "Adds a variable for editing with given weight."
+  (%cl-simplex-solver-add-edit-var solver
+				   (variable-for-designator variable)
+				   (coerce weight 'double-float)))
+
+(defun solver-add-weak-edit (solver variable weight)
+  "Adds a variable for editing with given weight."
+  (%cl-simplex-solver-add-edit-var-weak solver
+				   (variable-for-designator variable)
+				   (coerce weight 'double-float)))
+
+(defun solver-add-strong-edit (solver variable weight)
+  "Adds a variable for editing with given weight."
+  (%cl-simplex-solver-add-edit-var-strong solver
+				   (variable-for-designator variable)
+				   (coerce weight 'double-float)))
+
+(defun solver-suggest-value (solver variable value)
+  "Sets the edit value for the solver of variable to value."
+  (%cl-simplex-solver-suggest-value  solver
+				     (variable-for-designator variable)
+				     (coerce value 'double-float)))
 
 (defun solver-set-edited-value (solver variable value)
   "Sets the edit value for the solver of variable to value."
