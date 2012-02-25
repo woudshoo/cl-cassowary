@@ -1,0 +1,47 @@
+* Simple Cassowary bindings
+
+This a first attempt at cffi bindings to the cassowary lineair constraints library.
+
+** Example
+
+The following code
+
+#+BEGIN_EXAMPLE
+   (ql:quickload "cassowary")
+   (cassowary:init)
+
+   (let ((solver (cassowary:create-simplex-solver)))
+      (variable-new "x" :value 10.0 :solver solver)
+      (variable-new "y" :value 20.0 :solver solver)
+      (variable-new "z" :value 30.0 :solver solver)
+      (constraint-parse "x>=30" "weak" :solver solver)
+      (constraint-parse "y>=100" "weak" :solver solver)
+      (constraint-parse "z=x+y" "strong" :solver solver)
+      (constraint-parse "z<=50" "required" :solver solver)
+      (solver-solve solver)
+      (format t "Solution: x ~A, y ~A, z ~A~%" 
+	  (variable-value "x")
+	  (variable-value "y")
+	  (variable-value "z")))
+#+END_EXAMPLE
+
+results in
+
+#+BEGIN_EXAMPLE
+Solution: x 10.0d0, y 20.0d0, z 30.0d0
+NIL
+#+END_EXAMPLE
+
+
+* TODO
+
+- Check on null pointer return values
+- Make the results typed
+- Do we want to raise conditions?  or just return nil or nullpointer?
+- Add license file etc.
+
+- Expand C wrapper in cassowary so it supports: edit variables,
+  beginEdit, endEdit, etc.
+
+
+  
