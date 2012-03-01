@@ -2,7 +2,7 @@
 
 
 (defun print-solution ()
-  (format t "Solution: x ~A, y ~A, z ~A~%" 
+  (format t "Solution: x ~A, y ~A, z ~A~%"
 	  (variable-value "x")
 	  (variable-value "y")
 	  (variable-value "z")))
@@ -27,12 +27,28 @@
     (solver-resolve solver)
     (print-solution)))
 
+(defun edit-test ()
+  (let ((solver (simple-test)))
+    (solver-add-edit solver "x" 1.0)
+    (solver-add-edit solver "z" 1.0)
+    (solver-begin-edit solver)
+    (solver-suggest-value solver "x" 20)
+    (solver-suggest-value solver "z" 90)
+    (solver-resolve solver)
+    (print-solution)
+    (solver-suggest-value solver "x" 20)
+    (solver-suggest-value solver "z" 10)
+      (solver-resolve solver)      (print-solution)
+    (solver-end-edit solver)))
+
+
+
 
 (defun call-back-test ()
   (let ((solver (simple-test)))
     (solver-set-changed-callback solver (lambda (s v)
 					  (format t "~A = ~A~%"
-						  (variable-name v) 
+						  (variable-name v)
 						  (variable-value v))))
     (format t "Will change value!~%")
     (solver-set-edited-value solver "z" 40)

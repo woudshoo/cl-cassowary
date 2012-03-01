@@ -84,13 +84,13 @@
     :void
   (solver cl-simplex-solver)
   (variable cl-variable)
-  (value :double))
+  (weight :double))
 
 (cffi:defcfun ("CL_SimplexSolverAddStay" %cl-simplex-solver-add-stay)
     :void
   (solver cl-simplex-solver)
   (variable cl-variable)
-  (value :double))
+  (weight :double))
 
 (cffi:defcfun ("CL_Solve" %cl-solve)
     :void
@@ -217,17 +217,17 @@ then call this function and now you are setup for suggesting values and doing re
   "Stops an editing sequence and removes all edit variables."
   (%cl-simplex-solver-end-edit solver))
 
-(defun solver-add-stay (solver variable value)
+(defun solver-add-stay (solver variable &optional (weight 1))
   "Adds a stay constraint on the `variable' to the `solver'."
   (%cl-simplex-solver-add-stay solver 
 			       (variable-for-designator variable)
-			       (coerce value 'double-float)))
+			       (coerce weight 'double-float)))
 
-(defun solver-add-strong-stay (solver variable value)
+(defun solver-add-strong-stay (solver variable &optional (weight 1))
   "Adds a stay constraint on the `variable' to the `solver'."
   (%cl-simplex-solver-add-strong-stay solver 
 			       (variable-for-designator variable)
-			       (coerce value 'double-float)))
+			       (coerce weight 'double-float)))
 
 (defun solver-add-edit (solver variable weight)
   "Adds a variable for editing with given weight."

@@ -23,5 +23,7 @@
 	   #:solver-add-strong-edit
 	   #:solver-suggest-value
 	   #:solver-begin-edit
-	   #:solver-end-edit))
+	   #:solver-end-edit
+	   #:variable-name
+	   #:solver-add-stay))
 
